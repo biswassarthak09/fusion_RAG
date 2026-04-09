@@ -1,0 +1,17 @@
+# --- Phase 1: Core LangChain & Vector DB ---
+langchain==0.3.0
+langchain-community==0.3.0
+langchain-chroma==0.1.4
+langchain-ollama==0.2.0
+langchain-huggingface==0.1.0
+pypdf==5.0.0
+sentence-transformers==3.1.1
+
+# --- Phase 2: Agentic Routing & Web Search ---
+langgraph>=0.2.0
+ddgs>=0.1.0
+
+# --- Phase 3: Multimodal (Audio/Video Extraction) ---
+yt-dlp>=2024.0.0
+openai-whisper>=20231117
+opencv-python>=4.10.0
