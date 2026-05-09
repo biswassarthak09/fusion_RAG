@@ -5,7 +5,7 @@ from vector_db import create_retriever
 from graph_builder import build_graph
 
 # Configuration
-PDF_FILE = "vit.pdf"
+PDF_FILE = "Konzessionsvertrag_Freiburg_Wasser.PDF"
 
 def main():
     print(f"📄 1. Loading and parsing {PDF_FILE}...")

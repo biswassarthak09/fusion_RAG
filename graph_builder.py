@@ -6,7 +6,7 @@
 
 from langgraph.graph import END, StateGraph
 from state import GraphState
-from nodes import get_retrieve_node, generate_answer, grade_answer, route_question, web_search
+from nodes import get_retrieve_node, generate_answer, grade_answer
 
 def build_graph(retriever):
     """Wires the workers together into an Adaptive RAG loop."""
@@ -15,21 +15,13 @@ def build_graph(retriever):
 
     # 1. Add all our workers
     workflow.add_node("retrieve", get_retrieve_node(retriever))
-    workflow.add_node("web_search", web_search)
     workflow.add_node("generate", generate_answer)
     workflow.add_node("grade", grade_answer)
 
-    # 2. Add the Routing logic (The Front Door)
-    workflow.set_conditional_entry_point(
-        route_question,
-        {
-            "websearch": "web_search",
-            "vectorstore": "retrieve",
-        }
-    )
+    # 2. Direct Entry Point (Bypassing the router entirely)
+    workflow.set_entry_point("retrieve")
 
-    # 3. Connect the rest of the flow
-    workflow.add_edge("web_search", "generate")
+    # 3. Connect the flow
     workflow.add_edge("retrieve", "generate")
     workflow.add_edge("generate", "grade")
 

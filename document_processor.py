@@ -19,7 +19,7 @@ def load_and_split_pdf(file_path: str):
     # 2. Split the text
     # 1000 chars with 200 overlap is ideal for keeping scientific context intact
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=1000, 
+        chunk_size=2000, 
         chunk_overlap=200,
         separators=["\n\n", "\n", ".", " ", ""] 
     )
