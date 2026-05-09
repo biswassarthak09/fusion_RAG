@@ -15,3 +15,8 @@ ddgs>=0.1.0
 yt-dlp>=2024.0.0
 openai-whisper>=20231117
 opencv-python>=4.10.0
+
+beautifulsoup4
+
+# --- Phase 4: Template Filling ---
+openpyxl>=3.1.0

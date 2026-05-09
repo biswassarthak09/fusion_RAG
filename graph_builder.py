@@ -8,13 +8,13 @@ from langgraph.graph import END, StateGraph
 from state import GraphState
 from nodes import get_retrieve_node, generate_answer, grade_answer
 
-def build_graph(retriever):
+def build_graph(retriever, vectorstore=None, filenames=None, session_id=None):
     """Wires the workers together into an Adaptive RAG loop."""
     
     workflow = StateGraph(GraphState)
 
     # 1. Add all our workers
-    workflow.add_node("retrieve", get_retrieve_node(retriever))
+    workflow.add_node("retrieve", get_retrieve_node(retriever, vectorstore, filenames, session_id))
     workflow.add_node("generate", generate_answer)
     workflow.add_node("grade", grade_answer)
 
@@ -32,15 +32,16 @@ def build_graph(retriever):
             print("   ⚠️ Max revisions reached. Outputting best attempt.")
             return "useful"
         else:
-            return "not_supported"
+            # Re-retrieve instead of just re-generating with the same chunks
+            return "re_retrieve"
 
-    # 4. The Self-Correcting Loop
+    # 4. The Self-Correcting Loop — re-retrieve on failure for fresh context
     workflow.add_conditional_edges(
         "grade",
         decide_to_generate,
         {
             "useful": END,
-            "not_supported": "generate"
+            "re_retrieve": "retrieve"
         }
     )
 
